@@ -1,0 +1,7 @@
+# Игнор файла с токеном телеграма
+ttoken.txt
+# Игнор файла с API Access Key exchangeratesapi
+exchangeAK.txt
+# Игнор файла с тестами
+tests.py
+#
