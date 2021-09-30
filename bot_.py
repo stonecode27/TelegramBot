@@ -4,6 +4,7 @@ with open("ttoken.txt") as f:
     TOKEN = f.readline()
     bot = telebot.TeleBot(TOKEN)
 
+
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message: telebot.types.Message):
     bot.send_message(message.chat.id, f"""
@@ -16,6 +17,7 @@ def send_welcome(message: telebot.types.Message):
 Доступные валюты Вы можете посмотреть, отправив команду
 /values
 """)
+
 
 @bot.message_handler(commands=['values'])
 def send_values(message: telebot.types.Message):
@@ -32,6 +34,7 @@ ILS - Израильский шекель - шекель
 
 """)
 
+
 @bot.message_handler(content_types=['text'])
 def price_handler(message: telebot.types.Message):
     try:
@@ -40,10 +43,9 @@ def price_handler(message: telebot.types.Message):
     except APIException as m:
         bot.send_message(message.chat.id, f" Ошибка APIException: {m}")
     else:
-        bot.send_message(message.chat.id, f" {amount} {base} будут стоить" + " %.2f " % (result) +
+        bot.send_message(message.chat.id, f" {amount} {base} будут стоить" + " %.2f " % result +
                          f"{quote}")
 
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)
-

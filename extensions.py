@@ -72,6 +72,3 @@ class Values:  # Класс отвечающий за распознавание
             b_co = float(b["rates"][Values().dict_of_values[base]])
             result = float(amount)*float(q_co/b_co)
             return result
-
-
-
