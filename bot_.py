@@ -7,14 +7,14 @@ with open("ttoken.txt") as f:
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message: telebot.types.Message):
     bot.send_message(message.chat.id, f"""
-Приветствую Вас, {message.chat.username}!
-
 Чтобы узнать курс валюты, отправьте сообщение в следующем формате:
 <валюта, цену которой хотите узнать> <валюта, которую хотите обменять> <количество желаемой валюты>
 
 Пример: евро рубль 100
-Доступные валюты Вы можете посмотреть, отправив команду /values
 
+Обратите внимание, что количество валюты должно быть целым числом!
+Доступные валюты Вы можете посмотреть, отправив команду
+/values
 """)
 
 @bot.message_handler(commands=['values'])
@@ -34,12 +34,14 @@ ILS - Израильский шекель - шекель
 
 @bot.message_handler(content_types=['text'])
 def price_handler(message: telebot.types.Message):
-    quote, base, amount = Values().check_values(message.text)
-    bot.send_message(message.chat.id, f"""
-
-Вы хотите купить {amount} {base} в обмен на {quote}
-
-""")
+    try:
+        base, quote, amount = Values().check_values(message.text)
+        result = Values().get_price(base, quote, amount)
+    except APIException as m:
+        bot.send_message(message.chat.id, f" Ошибка APIException: {m}")
+    else:
+        bot.send_message(message.chat.id, f" {amount} {base} будут стоить" + " %.2f " % (result) +
+                         f"{quote}")
 
 
 if __name__ == "__main__":
